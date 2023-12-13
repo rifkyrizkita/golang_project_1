@@ -8,6 +8,8 @@ import (
 )
 
 func LikeRouters(like fiber.Router) {
-	//post router
+	// post routers
 	like.Post("/:id", middlewares.VerifyToken, controllers.LikeBlog)
+	// delete routers
+	like.Delete("/:id",middlewares.VerifyToken ,controllers.UnlikeBlog)
 }

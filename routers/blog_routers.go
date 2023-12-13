@@ -14,4 +14,6 @@ func BlogRouters(blog fiber.Router) {
 	blog.Get("/", controllers.FindAll)
 	blog.Get("/user", middlewares.VerifyToken, controllers.FindByUserID)
 	blog.Get("/:id", controllers.FindById)
+	// delete routers
+	blog.Delete("/:id", middlewares.VerifyToken,controllers.DeleteBlog)
 }

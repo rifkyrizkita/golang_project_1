@@ -210,3 +210,37 @@ func FindByUserID(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func DeleteBlog(c *fiber.Ctx) error {
+	UserID, ok := c.Locals("user").(jwt.MapClaims)["sub"].(float64)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "User not authenticated"})
+	}
+
+	BlogID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid 'id' parameter"})
+	}
+
+	var blog models.Blog
+	err = database.DB.Where("id = ?", BlogID).Take(&blog).Error
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Blog not found"})
+	}
+
+	if uint(UserID) != blog.UserID {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized: Wrong user id"})
+	}
+
+	err = database.DB.Delete(&blog, BlogID).Error
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	response := fiber.Map{
+		"message": "Blog deleted",
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
