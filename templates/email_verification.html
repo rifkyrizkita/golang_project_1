@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Our Blog!</title>
+  </head>
+  <body
+    style="
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f5f5f5;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h1
+        style="
+          color: #007bff;
+          font-size: 28px;
+          text-align: center;
+          margin-bottom: 20px;
+        "
+      >
+        🎉 Welcome to Our Blog, {{.Username}}! 🎉
+      </h1>
+
+      <p style="color: #555555; font-size: 16px; line-height: 1.5">
+        Hello {{.Username}}! We're thrilled to have you join our community of
+        passionate readers and writers. Your journey with our blog starts now!
+      </p>
+
+      <p style="color: #555555; font-size: 16px; line-height: 1.5">
+        To unlock the full experience, please click the link below to verify
+        your account:
+      </p>
+
+      <a
+        href="https://main--ornate-medovik-883748.netlify.app/verification/{{.Token}}"
+        style="
+          display: inline-block;
+          margin-top: 20px;
+          padding: 12px 24px;
+          background-color: #007bff;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 3px;
+          font-size: 16px;
+        "
+        >Verify Your Account</a
+      >
+
+      <p
+        style="
+          color: #555555;
+          font-size: 16px;
+          line-height: 1.5;
+          margin-top: 20px;
+        "
+      >
+        If you didn't sign up for our blog, just ignore this email—we won't
+        bother you again.
+      </p>
+
+      <p
+        style="
+          color: #555555;
+          font-size: 16px;
+          line-height: 1.5;
+          margin-top: 20px;
+          text-align: center;
+        "
+      >
+        Happy reading! 📚
+      </p>
+
+      <p
+        style="
+          color: #555555;
+          font-size: 16px;
+          line-height: 1.5;
+          margin-top: 20px;
+          text-align: center;
+        "
+      >
+        Best Regards,<br />
+        The Our Blog Team
+      </p>
+    </div>
+  </body>
+</html>
