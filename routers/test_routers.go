@@ -2,6 +2,9 @@ package routers
 
 import (
 	"fmt"
+	"golang_project_1/database"
+	"golang_project_1/middlewares"
+	"golang_project_1/models"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -9,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func TesterRouters(test fiber.Router) {
@@ -51,6 +55,22 @@ func TesterRouters(test fiber.Router) {
 		// If successful, return a success response
 		file := strings.Split(filename, "/")
 		return c.SendString(fmt.Sprintf("File %s deleted successfully", file[len(file)-1]))
+	})
+
+	// get router
+	test.Get("/cookie", middlewares.VerifyTokenCookie, func(c *fiber.Ctx) error {
+		id, ok := c.Locals("user").(jwt.MapClaims)["sub"]
+		if !ok {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Token not valid"})
+		}
+
+		var user models.User
+		err := database.DB.Where("id = ?", id).Take(&user).Error
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "User not found"})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"result": user})
 	})
 
 }

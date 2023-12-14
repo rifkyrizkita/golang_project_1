@@ -37,6 +37,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	tokenString, _ := helpers.GenerateToken(user.ID, time.Now().Add(time.Hour*24), c)
+
 	go func() {
 		helpers.SendEmailWithHTMLFile(
 			c,
@@ -109,6 +110,11 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	tokenString, _ := helpers.GenerateToken(user.ID, time.Now().Add(time.Hour*24), c)
+	c.Cookie(&fiber.Cookie{
+		Name:    "token",
+		Value:   tokenString,
+		Expires: time.Now().Add(1 * time.Hour),
+	})
 
 	response := fiber.Map{
 		"message": "Login successful",
@@ -222,7 +228,7 @@ func ForgetPassword(c *fiber.Ctx) error {
 	}
 
 	tokenString, _ := helpers.GenerateToken(user.ID, time.Now().Add(time.Hour*24), c)
-	
+
 	go func() {
 		helpers.SendEmailWithHTMLFile(
 			c,
