@@ -87,6 +87,7 @@ func FindAll(c *fiber.Ctx) error {
 	offset := (page - 1) * limit
 
 	var blogs []models.Blog
+	var total_blogs int64
 	if search != "" {
 		err := database.DB.Joins("User").
 			Joins("Category").
@@ -95,6 +96,7 @@ func FindAll(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
+			Count(&total_blogs).
 			Error
 
 		if err != nil {
@@ -107,6 +109,7 @@ func FindAll(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
+			Count(&total_blogs).
 			Error
 
 		if err != nil {
@@ -134,6 +137,7 @@ func FindAll(c *fiber.Ctx) error {
 	}
 
 	response := fiber.Map{
+		"total_blogs": total_blogs,
 		"result": blogs,
 	}
 
@@ -153,6 +157,7 @@ func FindByUserID(c *fiber.Ctx) error {
 	}
 
 	var blogs []models.Blog
+	var total_blogs int64
 
 	if search != "" {
 		err := database.DB.Joins("User").
@@ -163,6 +168,7 @@ func FindByUserID(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
+			Count(&total_blogs).
 			Error
 
 		if err != nil {
@@ -176,6 +182,7 @@ func FindByUserID(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
+			Count(&total_blogs).
 			Error
 
 		if err != nil {
@@ -205,6 +212,7 @@ func FindByUserID(c *fiber.Ctx) error {
 	}
 
 	response := fiber.Map{
+		"total_blogs": total_blogs,
 		"result": blogs,
 	}
 

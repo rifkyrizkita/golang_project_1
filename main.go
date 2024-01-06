@@ -25,10 +25,13 @@ func init() {
 }
 func main() {
 	app := fiber.New()
+	
+	// middlewares
 	app.Use(recover.New())
 	app.Use(cors.New())
 	app.Use(logger.New())
 	app.Static("/", "./public")
+
 	// routers
 	routers.SetupRouters(app)
 
