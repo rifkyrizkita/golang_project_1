@@ -5,6 +5,7 @@ import (
 	"golang_project_1/helpers"
 	"golang_project_1/models"
 	"golang_project_1/web/requests"
+	"math"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -96,9 +97,12 @@ func FindAll(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
-			Count(&total_blogs).
 			Error
 
+		if err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		}
+		err = database.DB.Model(&models.Blog{}).Where("title like ?", "%"+search+"%").Count(&total_blogs).Error
 		if err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -109,9 +113,12 @@ func FindAll(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
-			Count(&total_blogs).
 			Error
 
+		if err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		}
+		err = database.DB.Model(&models.Blog{}).Count(&total_blogs).Error
 		if err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -137,8 +144,10 @@ func FindAll(c *fiber.Ctx) error {
 	}
 
 	response := fiber.Map{
-		"total_blogs": total_blogs,
-		"result": blogs,
+		"total_blogs":  total_blogs,
+		"current_page": page,
+		"total_pages":  int(math.Ceil(float64(total_blogs) / float64(limit))),
+		"result":       blogs,
 	}
 
 	return c.Status(fiber.StatusOK).JSON(response)
@@ -168,9 +177,12 @@ func FindByUserID(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
-			Count(&total_blogs).
 			Error
 
+		if err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		}
+		err = database.DB.Model(&models.Blog{}).Where("title like ?", "%"+search+"%").Count(&total_blogs).Error
 		if err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -182,9 +194,12 @@ func FindByUserID(c *fiber.Ctx) error {
 			Offset(offset).
 			Order("created_at " + order).
 			Find(&blogs).
-			Count(&total_blogs).
 			Error
 
+		if err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		}
+		err = database.DB.Model(&models.Blog{}).Count(&total_blogs).Error
 		if err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -212,8 +227,10 @@ func FindByUserID(c *fiber.Ctx) error {
 	}
 
 	response := fiber.Map{
-		"total_blogs": total_blogs,
-		"result": blogs,
+		"total_blogs":  total_blogs,
+		"current_page": page,
+		"total_pages":  int(math.Ceil(float64(total_blogs) / float64(limit))),
+		"result":       blogs,
 	}
 
 	return c.Status(fiber.StatusOK).JSON(response)
